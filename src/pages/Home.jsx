@@ -9,18 +9,6 @@ const Home = () => {
 
     const { memories,  page, setPage, pageCount} = useGlobalContext();
 
-
-
-    function handleNext() {
-        setPage((p) => {
-            // if(p===pageCount){
-            if (p === Math.ceil(pageCount)) {
-                return p;
-            }
-            return p + 1;
-        })
-    }
-
     const fetchData = () => {
         // let p = page;
         setPage((p) => {

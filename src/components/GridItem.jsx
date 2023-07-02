@@ -1,22 +1,32 @@
 
-import { Button, Card, CardActions, CardContent, CardMedia, Tooltip, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, Container, Link, Tooltip, Typography } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import DeleteItem from "./DeleteItem";
-
+import { Link as RouterLink} from 'react-router-dom'
 
 const GridItem = ({ yaad }) => {
     return (
         <>
             <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                    sx={{ height: 160 }}
-                    image={yaad.image}
-                    title={yaad.name}
-                />
+                <Link  component={RouterLink} to={`/memory/${yaad._id}`}>
+                    <CardMedia
+                        sx={{ height: 160 }}
+                        image={yaad.image}
+                        title={yaad.name}
+                    />
+                </Link>
+                <p style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Tooltip title="Mood" placement="right">
+                        <Typography sx={{ pl: 2, textTransform: "capitalize" }}>{yaad.mood}</Typography>
+                    </Tooltip>
+                    <Tooltip title="Author" placement="left">
+                        <Typography color="secondary" sx={{ pr: 2 }}>anonomous</Typography>
+                    </Tooltip>
+                </p>
                 <CardContent>
-                    <Typography align="center" gutterBottom  component="p">
+                    <Typography align="center" gutterBottom component="p" sx={{ textTransform: "capitalize" }}>
                         {yaad.name.length <= 30 ? yaad.name : (yaad.name.substr(0, 30) + "...")}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -40,8 +50,8 @@ const GridItem = ({ yaad }) => {
                         </Typography>
                     </Tooltip>
                     <Tooltip title="Delete" placement="bottom">
-                        <p style={{cursor:"pointer"}}>
-                        <DeleteItem yaad={yaad} />
+                        <p style={{ cursor: "pointer" }}>
+                            <DeleteItem yaad={yaad} />
                         </p>
                     </Tooltip>
                 </CardActions>

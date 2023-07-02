@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import red from '@mui/material/colors/red';
 import { GlobalContextProvider, useGlobalContext } from './context/memories'
+import Memory from './components/Memory';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/memory/:id" element={<Memory />} />
           </Routes>
           <Footer />
         </GlobalContextProvider>
