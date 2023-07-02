@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import red from '@mui/material/colors/red';
+import { GlobalContextProvider, useGlobalContext } from './context/memories'
 
 
 function App() {
@@ -22,17 +23,18 @@ function App() {
       mode: 'dark'
     }
   })
-  console.log(theme)
   return (
 
     <ThemeProvider theme={theme} >
       <CssBaseline />
       <Paper elevation={0}>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-        <Footer />
+        <GlobalContextProvider>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+          <Footer />
+        </GlobalContextProvider>
       </Paper>
     </ThemeProvider>
   );
