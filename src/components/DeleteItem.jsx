@@ -14,6 +14,7 @@ const DeleteItem = ({ yaad }) => {
         setOpen(false);
     };
 
+
     return (
         <>
             <div>

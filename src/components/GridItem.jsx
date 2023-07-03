@@ -7,10 +7,27 @@ import DeleteItem from "./DeleteItem";
 import { Link as RouterLink} from 'react-router-dom'
 
 const GridItem = ({ yaad }) => {
+
+
+    async function postLike(url = "") {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${url}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        let res = await response.json();
+        return res;
+    }
+        
+    const updateViews = async () =>{
+        let res = await postLike(`memory/stats/view/${yaad._id}`)
+    }
+
     return (
         <>
             <Card sx={{ maxWidth: 345 }}>
-                <Link  component={RouterLink} to={`/memory/${yaad._id}`}>
+                <Link  component={RouterLink} onClick={updateViews} to={`/memory/${yaad._id}`}>
                     <CardMedia
                         sx={{ height: 160 }}
                         image={yaad.image}
