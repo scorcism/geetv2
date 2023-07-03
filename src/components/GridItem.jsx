@@ -49,11 +49,6 @@ const GridItem = ({ yaad }) => {
                             <VisibilityIcon />{yaad.views}
                         </Typography>
                     </Tooltip>
-                    <Tooltip title="Delete" placement="bottom">
-                        <p style={{ cursor: "pointer" }}>
-                            <DeleteItem yaad={yaad} />
-                        </p>
-                    </Tooltip>
                 </CardActions>
             </Card>
 

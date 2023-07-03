@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, TextField } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const DeleteItem = ({ yaad }) => {
@@ -17,7 +17,10 @@ const DeleteItem = ({ yaad }) => {
     return (
         <>
             <div>
-                <DeleteIcon onClick={handleClickOpen} />
+            <Fab size="small" aria-label="delete">
+                <DeleteIcon sx={{cursor:"pointer"}} onClick={handleClickOpen} />
+            </Fab>
+                
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle>{yaad.name}</DialogTitle>
                     <DialogContent>
