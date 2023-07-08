@@ -78,7 +78,6 @@ const Memory = () => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen(false);
     };
 

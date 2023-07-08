@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import red from '@mui/material/colors/red';
 import { GlobalContextProvider, useGlobalContext } from './context/memories'
 import Memory from './components/Memory';
+import AddMemory from './pages/AddMemory';
 
 
 function App() {
@@ -24,20 +25,20 @@ function App() {
       mode: 'dark'
     }
   })
+  
   return (
 
     <ThemeProvider theme={theme} >
       <CssBaseline />
-      <Paper elevation={0}>
         <GlobalContextProvider>
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/memory/:id" element={<Memory />} />
+            <Route path="/add" element={<AddMemory />} />
           </Routes>
           <Footer />
         </GlobalContextProvider>
-      </Paper>
     </ThemeProvider>
   );
 }

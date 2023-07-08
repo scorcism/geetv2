@@ -25,7 +25,7 @@ const Home = () => {
             <Box sx={{ mx: 2, my: 3, }}>
 
                 <InfiniteScroll
-                    dataLength={memories.length} //This is important field to render the next data
+                    dataLength={memories.length} 
                     next={fetchData}
                     hasMore={page !== pageCount}
                     loader={<Typography align="center" variant="h4">
