@@ -187,7 +187,7 @@ const Memory = () => {
                         </Grid>
 
                         <Grid item xs={6} sx={{ backgroundColor: "", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "50%" }}  >
-                            <Typography color="white" backgroundColor="red" sx={{ py: 2, px: 2, borderRadius: 1, m: 1, textAlign: "center" }}>
+                            <Typography color="white"  backgroundColor="red" sx={{ maxLines:12, py: 2, px: 2, borderRadius: 1, m: 1, textAlign: "center" }}>
                                 {memory.desc}
                             </Typography>
                         </Grid>
