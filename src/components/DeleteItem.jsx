@@ -26,7 +26,7 @@ const DeleteItem = ({ yaad }) => {
                 "Access-Control-Allow-Origin": "*"
             },
             body: JSON.stringify({
-                password: password,
+                userpassword: password,
             })
         });
         let res = await response.json();
