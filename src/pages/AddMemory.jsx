@@ -66,6 +66,14 @@ export default function AddMemory() {
                         message: "Memory Added",
                         open: true
                     })
+                    setData({
+                        name: "",
+                        mood: "happy",
+                        handle: "anonymous",
+                        desc: "",
+                        password: ""
+                    })
+                    setImage(null);
                 } else if (data.status == 0) {
                     setSnackBar_({
                         message: "Some error occured!",
@@ -77,17 +85,40 @@ export default function AddMemory() {
 
     const handleSubmit = (event) => {
         if (data.name.length < 20 || data.name.length >= 85) {
-            alert("Title should be between 20 and 85 character")
+            setSnackBar_({
+                message:"Title should be between 20 and 85 character",
+                open:true
+            })
             return;
         }
         if (data.desc.length < 300 || data.desc.length > 900) {
-            alert("Desc length should be between 300 and 900 character")
+            setSnackBar_({
+                message:"Desc length should be between 300 and 900 character",
+                open:true
+            })
             return;
         }
-        if(!image){
-            alert("Set Image");
+        if (!image) {
+            setSnackBar_({
+                message:"Set Image",
+                open:true
+            })
             return;
         }
+
+        const  checkPassword  = (str) => {
+            var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+            return re.test(str);
+        }
+
+        if(!checkPassword(data.password)){
+            setSnackBar_({
+                message:"Follow Password *requirements*",
+                open:true
+            })
+            return;
+        }
+
         postData();
     };
 
@@ -139,6 +170,15 @@ export default function AddMemory() {
         document.title = "Add Memory - GEET"
     }, [])
 
+    if (snackbar_.open) {
+        setTimeout(() => {
+            setSnackBar_({
+                message: "",
+                open: false
+            });
+        }, 1800);
+    }
+
     return (
         <>
             <Snacks snackbar_={snackbar_} setSnackBar_={setSnackBar_} />
@@ -170,6 +210,7 @@ export default function AddMemory() {
                                         value={data.mood}
                                         label="Mood"
                                         name="mood"
+                                        
                                         onChange={handleOnChange}
                                     >
                                         <MenuItem value={"happy"}>Happy</MenuItem>
@@ -185,6 +226,7 @@ export default function AddMemory() {
                                     id="lastName"
                                     label="Handle"
                                     name="handle"
+                                    value={data.handle}
                                     placeholder={data.handle}
                                     title="leave black for anonimity"
                                     onChange={handleOnChange}
@@ -214,9 +256,12 @@ export default function AddMemory() {
                                     label="Password"
                                     type="password"
                                     id="password"
+                                    value={data.password}
                                     name="password"
+                                    title="min 8 letters, with at least a symbol, upper and lower case letters and a number"
                                     onChange={handleOnChange}
                                 />
+                                <Typography variant='body2' component="body2" color="secondary.dark" sx={{fontSize:"12px"}}>*Password should contain  min 8 letters , with at least a symbol, upper and lower case letters and a number</Typography>
                             </Grid>
 
                         </Grid>
