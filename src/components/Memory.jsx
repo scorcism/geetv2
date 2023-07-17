@@ -40,9 +40,8 @@ const Memory = () => {
         // console.log(res)
         let mem = res[0]
         setMemory(mem);
-        setLikes(mem.likes);
-        setDislikes(mem.dislikes)
-        setViews(mem.views)
+        updateState(mem);
+        document.title = `${mem.name} | GEET `
     }
 
     async function postLike(url = "") {
@@ -59,7 +58,7 @@ const Memory = () => {
     const dislikeClick = async () => {
         let res = await postLike(`memory/stats/dislike/${memory._id}`)
         // console.log(res)
-        setDislikes(res.message)
+        updateState(res.message);
         setPostDisliked(true);
         setSnackMessage("sorry to see that")
         setOpen(true);
@@ -68,7 +67,7 @@ const Memory = () => {
     const likeClick = async () => {
         let res = await postLike(`memory/stats/like/${memory._id}`)
         // console.log(res)
-        setLikes(res.message)
+        updateState(res.message);
         setPostLiked(true);
         setSnackMessage("Glad ! you loved this.")
         setOpen(true);
@@ -80,6 +79,13 @@ const Memory = () => {
         }
         setOpen(false);
     };
+
+    const updateState = (data) =>{
+        console.log(data)
+        setLikes(data.likes);
+        setDislikes(data.dislikes);
+        setViews(data.views);
+    }
 
     if (open) {
         setTimeout(() => {

@@ -10,6 +10,8 @@ import red from '@mui/material/colors/red';
 import { GlobalContextProvider, useGlobalContext } from './context/memories'
 import Memory from './components/Memory';
 import AddMemory from './pages/AddMemory';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/memory/:id" element={<Memory />} />
             <Route path="/add" element={<AddMemory />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
           <Footer />
         </GlobalContextProvider>

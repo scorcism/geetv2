@@ -167,7 +167,7 @@ export default function AddMemory() {
     }
 
     useEffect(() => {
-        document.title = "Add Memory - GEET"
+        document.title = "Add Memory | GEET"
     }, [])
 
     if (snackbar_.open) {

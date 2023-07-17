@@ -5,10 +5,17 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Link } from '@mui/material';
-import { Link as RouterLink} from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
+import { useEffect, useState } from 'react';
 
 const Header = () => {
-    
+
+    const [userToken, setUserToken] = useState();
+
+    useEffect(() => {
+        setUserToken(localStorage.getItem("user"));
+    }, [])
+
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -20,9 +27,22 @@ const Header = () => {
                                 GEET
                             </Link>
                         </Typography>
-                        <Button color="inherit">
-                            <Link component={RouterLink} variant='text' underline="none" to="/add">Add Memory</Link>
-                        </Button>
+                        {
+                            userToken ?
+                                <Button color="inherit">
+                                    <Link component={RouterLink} variant='text' underline="none" to="/add">Add Memory</Link>
+                                </Button>
+                                :
+                                <>
+                                    <Button color="inherit">
+                                        <Link component={RouterLink} variant='text' underline="none" to="/login">Login</Link>
+                                    </Button>
+                                    <Typography style={{ marginLeft: "0.3rem", marginRight:"0.3rem" }} />
+                                    <Button color="inherit" >
+                                        <Link component={RouterLink} variant='text' underline="none" to="/register">Register</Link>
+                                    </Button>
+                                </>
+                        }
                     </Toolbar>
                 </AppBar>
             </Box>

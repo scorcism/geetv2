@@ -4,6 +4,7 @@ import { useGlobalContext } from "../context/memories";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
+import { useEffect } from "react";
 
 const Home = () => {
 
@@ -19,6 +20,10 @@ const Home = () => {
             return p + 1;
         })
     }
+
+    useEffect(()=>{
+        document.title = "GEET"
+    },[])
 
     return (
         <>
