@@ -9,33 +9,78 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
+import Snacks from '../components/Snacks';
 
 
 export default function Login() {
-    
+
     let navigate = useNavigate();
-    
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
+
+    const [data, setData] = useState({
+        username: "",
+        password: "",
+    })
+
+    const [snackbar_, setSnackBar_] = useState({
+        message: "",
+        open: false
+    })
+
+    async function postData(url = "") {
+        console.log("URL: " + `${process.env.REACT_APP_BACKEND_URL}/${url}`)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${url}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: data.username,
+                password: data.password
+            }),
         });
+        let res = await response.json();
+        return res;
+    }
+
+    const formSubmit = async () => {
+
+        let res = await postData("auth/login");
+        if (res.status == 0) {
+            setSnackBar_({
+                message: res.message,
+                open: true,
+            })
+        } else if (res.status == 1) {
+            setSnackBar_({
+                message: "Logged in successfully, you will be redirected to home page in 4 seconds",
+                open: true,
+            })
+            localStorage.setItem("user-token", res.message)
+            setTimeout(() => {
+                navigate("/")
+            }, 4000);
+        }
     };
 
+    const handleChange = (e) => {
+        setData({ ...data, [e.target.name]: e.target.value })
+    }
+
     useEffect(() => {
-        if(localStorage.getItem("user")){
+        document.title = "Login - GEET"
+        if (localStorage.getItem("user")) {
             navigate("/")
         }
     }, [])
 
     return (
-        <div style={{ minHeight: "100vh", paddingTop: "10rem" }}>
+        <div>
+            <Snacks snackbar_={snackbar_} setSnackBar_={setSnackBar_} />
             {/* <div style={{ backgroundImage: "url(/bg.png)", minHeight: "100vh", paddingTop: "10rem" }}> */}
-            <Container component="main" style={{}} maxWidth="xs" sx={{ marginBottom: "12rem" }}>
+            <Container component="main" style={{}} maxWidth="xs" sx={{ marginBottom: "8rem" }}>
                 <Box
                     sx={{
+                        marginTop: 4,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -45,18 +90,21 @@ export default function Login() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Login
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Box component="form" noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
+                            id="username"
+                            label="Username"
+                            name="username"
+                            type="text"
+                            autoComplete="username"
                             autoFocus
+                            value={data.username}
+                            onChange={handleChange}
                         />
                         <TextField
                             margin="normal"
@@ -67,15 +115,17 @@ export default function Login() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            value={data.password}
+                            onChange={handleChange}
                         />
                         <Button
-                            type="submit"
                             fullWidth
                             variant="contained"
                             color="secondary"
                             sx={{ mt: 3, mb: 2 }}
+                            onClick={formSubmit}
                         >
-                            Sign In
+                            Log In
                         </Button>
                         <Grid container>
                             <Grid item xs>

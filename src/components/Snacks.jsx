@@ -12,10 +12,19 @@ export default function Snacks({ snackbar_, setSnackBar_ }) {
             return;
         }
         setSnackBar_({
-            message:"",
-            open:false
+            message: "",
+            open: false
         });
     };
+
+    if (snackbar_.open) {
+        setTimeout(() => {
+            setSnackBar_({
+                message: "",
+                open: false
+            });
+        }, 1800);
+    }
 
     const action = (
         <React.Fragment>

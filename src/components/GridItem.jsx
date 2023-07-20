@@ -39,7 +39,7 @@ const GridItem = ({ yaad }) => {
                         <Typography sx={{ pl: 2, textTransform: "capitalize" }}>{yaad.mood}</Typography>
                     </Tooltip>
                     <Tooltip title="Author" placement="left">
-                        <Typography color="secondary" sx={{ pr: 2 }}>anonomous</Typography>
+                        <Typography color="secondary" sx={{ pr: 2, }}>{yaad.handle}</Typography>
                     </Tooltip>
                 </p>
                 <CardContent>

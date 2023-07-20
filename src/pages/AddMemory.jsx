@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Snacks from '../components/Snacks';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function AddMemory() {
@@ -37,6 +38,9 @@ export default function AddMemory() {
 
     const [titleLen, setTitleLen] = useState("");
     const [descLen, setDescLen] = useState("");
+    const [userToken, setUserToken] = useState("");
+
+    let navigate = useNavigate();
 
     const postData = async () => {
         const requestOptions = {
@@ -46,7 +50,8 @@ export default function AddMemory() {
             headers: {
                 "Content-Type": "application/json",
                 Access: "application/json",
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "auth-token": userToken
             },
 
             body: JSON.stringify({
@@ -76,7 +81,7 @@ export default function AddMemory() {
                     setImage(null);
                 } else if (data.status == 0) {
                     setSnackBar_({
-                        message: "Some error occured!",
+                        message: data.message,
                         open: true
                     })
                 }
@@ -86,35 +91,35 @@ export default function AddMemory() {
     const handleSubmit = (event) => {
         if (data.name.length < 20 || data.name.length >= 85) {
             setSnackBar_({
-                message:"Title should be between 20 and 85 character",
-                open:true
+                message: "Title should be between 20 and 85 character",
+                open: true
             })
             return;
         }
         if (data.desc.length < 300 || data.desc.length > 900) {
             setSnackBar_({
-                message:"Desc length should be between 300 and 900 character",
-                open:true
+                message: "Desc length should be between 300 and 900 character",
+                open: true
             })
             return;
         }
         if (!image) {
             setSnackBar_({
-                message:"Set Image",
-                open:true
+                message: "Set Image",
+                open: true
             })
             return;
         }
 
-        const  checkPassword  = (str) => {
+        const checkPassword = (str) => {
             var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
             return re.test(str);
         }
 
-        if(!checkPassword(data.password)){
+        if (!checkPassword(data.password)) {
             setSnackBar_({
-                message:"Follow Password *requirements*",
-                open:true
+                message: "Follow Password *requirements*",
+                open: true
             })
             return;
         }
@@ -166,18 +171,16 @@ export default function AddMemory() {
         }
     }
 
+
     useEffect(() => {
         document.title = "Add Memory | GEET"
+        let token = localStorage.getItem("user-token");
+        if (!token) {
+            navigate("/login");
+        }else if(token){
+            setUserToken(token)
+        }
     }, [])
-
-    if (snackbar_.open) {
-        setTimeout(() => {
-            setSnackBar_({
-                message: "",
-                open: false
-            });
-        }, 1800);
-    }
 
     return (
         <>
@@ -210,7 +213,7 @@ export default function AddMemory() {
                                         value={data.mood}
                                         label="Mood"
                                         name="mood"
-                                        
+
                                         onChange={handleOnChange}
                                     >
                                         <MenuItem value={"happy"}>Happy</MenuItem>
@@ -261,7 +264,7 @@ export default function AddMemory() {
                                     title="min 8 letters, with at least a symbol, upper and lower case letters and a number"
                                     onChange={handleOnChange}
                                 />
-                                <Typography variant='body2' component="body2" color="secondary.dark" sx={{fontSize:"12px"}}>*Password should contain  min 8 letters , with at least a symbol, upper and lower case letters and a number</Typography>
+                                <Typography variant='body' component="body" color="secondary.dark" sx={{ fontSize: "12px" }}>*Password should contain  min 8 letters , with at least a symbol, upper and lower case letters and a number</Typography>
                             </Grid>
 
                         </Grid>
