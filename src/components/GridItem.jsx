@@ -50,15 +50,10 @@ const GridItem = ({ yaad }) => {
                         {yaad.desc.length <= 60 ? yaad.desc : (yaad.desc.substr(0, 60) + "...")}
                     </Typography>
                 </CardContent>
-                <CardActions sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <CardActions sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
                     <Tooltip title="Likes" placement="bottom-start">
                         <Typography align="center" sx={{ display: "flex" }}>
                             <FavoriteIcon />{yaad.likes}
-                        </Typography>
-                    </Tooltip>
-                    <Tooltip title="Dislikes" placement="bottom">
-                        <Typography align="center" sx={{ display: "flex" }}>
-                            <HeartBrokenIcon />{yaad.dislikes}
                         </Typography>
                     </Tooltip>
                     <Tooltip title="Views" placement="bottom-end">

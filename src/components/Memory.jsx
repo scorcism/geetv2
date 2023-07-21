@@ -37,10 +37,8 @@ const Memory = () => {
 
     const getMem = async () => {
         let res = await getMemory(`/getmemory/${id}`)
-        // console.log(res)
-        let mem = res[0]
+        let mem = res.memory[0]
         setMemory(mem);
-        updateState(mem);
         document.title = `${mem.name} | GEET `
     }
 
@@ -55,19 +53,10 @@ const Memory = () => {
         return res;
     }
 
-    const dislikeClick = async () => {
-        let res = await postLike(`memory/stats/dislike/${memory._id}`)
-        // console.log(res)
-        updateState(res.message);
-        setPostDisliked(true);
-        setSnackMessage("sorry to see that")
-        setOpen(true);
-    }
-
     const likeClick = async () => {
         let res = await postLike(`memory/stats/like/${memory._id}`)
-        // console.log(res)
-        updateState(res.message);
+        // console.log(res.message)
+        setMemory(res.message);
         setPostLiked(true);
         setSnackMessage("Glad ! you loved this.")
         setOpen(true);
@@ -80,12 +69,6 @@ const Memory = () => {
         setOpen(false);
     };
 
-    const updateState = (data) =>{
-        console.log(data)
-        setLikes(data.likes);
-        setDislikes(data.dislikes);
-        setViews(data.views);
-    }
 
     if (open) {
         setTimeout(() => {
@@ -146,33 +129,20 @@ const Memory = () => {
                                     <Badge anchorOrigin={{
                                         vertical: 'top',
                                         horizontal: 'right',
-                                    }} badgeContent={likes} color="secondary">
-                                        <Fab size="small" color="primary" disabled={(postDisliked || postLiked)} onClick={likeClick} aria-label="add" >
+                                    }} badgeContent={memory.likes} color="secondary"> 
+                                        <Fab size="small" color="primary" disabled={postLiked} onClick={likeClick} aria-label="add" >
 
                                             {
-                                                (!postLiked && !postDisliked) ? <FavoriteBorderIcon /> : <FavoriteIcon color="secondary" />
+                                                !postLiked  ? <FavoriteBorderIcon /> : <FavoriteIcon color="secondary" />
                                             }
 
                                         </Fab>
                                     </Badge>
                                 </Tooltip>
 
-                                <Tooltip title="Dislike" placement="bottom">
-                                    <Badge anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }} badgeContent={dislikes} color="secondary">
-                                        <Fab size="small" color="primary" disabled={(postDisliked || postLiked)} onClick={dislikeClick} aria-label="add">
-                                            {
-                                                (!postDisliked && !postLiked) ?<ThumbDownOffAltIcon /> : <SentimentDissatisfiedIcon/>
-                                            }
-
-                                        </Fab>
-                                    </Badge>
-                                </Tooltip>
 
                                 <Tooltip title="views" placement="bottom">
-                                    <Badge badgeContent={views} color="secondary" >
+                                    <Badge badgeContent={memory.views} color="secondary" >
                                         <Fab size="small" color="primary" aria-label="views">
                                             <RemoveRedEyeIcon />
                                         </Fab>

@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, TextField, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from "react-router-dom";
 
 const DeleteItem = ({ yaad }) => {
 
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState(false);
     const [password, setPassword] = useState("");
+    let navigate = useNavigate();
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -23,7 +26,8 @@ const DeleteItem = ({ yaad }) => {
             headers: {
                 "Content-Type": "application/json",
                 Access: "application/json",
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "auth-token":localStorage.getItem("user-token"),
             },
             body: JSON.stringify({
                 userpassword: password,
@@ -40,7 +44,14 @@ const DeleteItem = ({ yaad }) => {
         }
         else if (password.length >= 5) {
             let del = await deleteNote(`deletememory/${yaad._id}`)
-            setMessage(del.message)
+            if(del.status==1){
+                setMessage(del.message)
+                setTimeout(() => {
+                    navigate("/")
+                }, 2000);
+            }else if(del.status==0){
+                setMessage(del.message)
+            }
         }
     }
 
