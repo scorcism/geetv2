@@ -23,6 +23,8 @@ const Memory = () => {
     const [postLiked, setPostLiked] = useState(false);
     const [postDisliked, setPostDisliked] = useState(false);
     const [snackMessage, setSnackMessage] = useState("")
+    const [userToken, setUserToken] = useState()
+
 
     async function getMemory(url = "") {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${url}`, {
@@ -37,6 +39,10 @@ const Memory = () => {
 
     const getMem = async () => {
         let res = await getMemory(`/getmemory/${id}`)
+        if(!res){
+            window.location.href="/"
+            return;
+        }
         let mem = res.memory[0]
         setMemory(mem);
         document.title = `${mem.name} | GEET `
@@ -47,6 +53,7 @@ const Memory = () => {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
+                "auth-token": userToken
             },
         });
         let res = await response.json();
@@ -56,10 +63,14 @@ const Memory = () => {
     const likeClick = async () => {
         let res = await postLike(`memory/stats/like/${memory._id}`)
         // console.log(res.message)
-        setMemory(res.message);
-        setPostLiked(true);
-        setSnackMessage("Glad ! you loved this.")
-        setOpen(true);
+        if (res.status == 1) {
+            setPostLiked(true);
+            setSnackMessage("Glad ! you loved this.")
+            setOpen(true);
+        } else if (res.status == 0) {
+            setSnackMessage(res.message)
+            setOpen(true);
+        }
     }
 
     const handleClose = (event, reason) => {
@@ -76,6 +87,7 @@ const Memory = () => {
         }, 3000);
     }
 
+
     const action = (
         <>
             <IconButton
@@ -89,7 +101,7 @@ const Memory = () => {
         </>
     );
 
-    const copyCurrentUrl =() =>{
+    const copyCurrentUrl = () => {
         navigator.clipboard.writeText(`${window.location.href}`)
         setSnackMessage("copied.")
         setOpen(true);
@@ -97,8 +109,10 @@ const Memory = () => {
 
 
     useEffect(() => {
+        let user_token = localStorage.getItem("user-token");
+        setUserToken(user_token)
         getMem();
-    }, [])
+    }, [postLiked])
 
 
 
@@ -129,11 +143,11 @@ const Memory = () => {
                                     <Badge anchorOrigin={{
                                         vertical: 'top',
                                         horizontal: 'right',
-                                    }} badgeContent={memory.likes} color="secondary"> 
+                                    }} badgeContent={memory.likes} color="secondary">
                                         <Fab size="small" color="primary" disabled={postLiked} onClick={likeClick} aria-label="add" >
 
                                             {
-                                                !postLiked  ? <FavoriteBorderIcon /> : <FavoriteIcon color="secondary" />
+                                                !postLiked ? <FavoriteBorderIcon /> : <FavoriteIcon color="secondary" />
                                             }
 
                                         </Fab>
@@ -163,7 +177,7 @@ const Memory = () => {
                         </Grid>
 
                         <Grid item xs={6} sx={{ backgroundColor: "", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "50%" }}  >
-                            <Typography color="white"  backgroundColor="red" sx={{ maxLines:12, py: 2, px: 2, borderRadius: 1, m: 1, textAlign: "center", wordBreak:"break-all" }}>
+                            <Typography color="white" backgroundColor="red" sx={{ maxLines: 12, py: 2, px: 2, borderRadius: 1, m: 1, textAlign: "center", wordBreak: "break-all" }}>
                                 {memory.desc}
                             </Typography>
                         </Grid>

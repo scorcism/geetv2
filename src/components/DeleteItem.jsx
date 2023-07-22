@@ -47,7 +47,7 @@ const DeleteItem = ({ yaad }) => {
             if(del.status==1){
                 setMessage(del.message)
                 setTimeout(() => {
-                    navigate("/")
+                    window.location.href = "/"
                 }, 2000);
             }else if(del.status==0){
                 setMessage(del.message)

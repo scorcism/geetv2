@@ -48,7 +48,7 @@ const Home = () => {
                         {
                             memories.map((yaad) => {
                                 return (
-                                    <Grid item xs={3}>
+                                    <Grid item md={3} sm={12}>
                                         <GridItem yaad={yaad} />
                                     </Grid>
                                 )
