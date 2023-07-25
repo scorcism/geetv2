@@ -25,6 +25,8 @@ export default function Register() {
         password: ""
     })
 
+    const [emailMessage, setEmailMessage] = useState("");
+
     async function postData(url = "") {
         console.log("URL: " + `${process.env.REACT_APP_BACKEND_URL}/${url}`)
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${url}`, {
@@ -42,15 +44,17 @@ export default function Register() {
         return res;
     }
 
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
+
     const formSubit = async () => {
 
-        const validateEmail = (email) => {
-            return String(email)
-                .toLowerCase()
-                .match(
-                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                );
-        };
 
         if (data.username.length < 6) {
             setSnackBar_({
@@ -71,7 +75,7 @@ export default function Register() {
             var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
             return re.test(str);
         }
-        
+
         if (!checkPassword(data.password)) {
             setSnackBar_({
                 message: "Follow Password *requirements*",
@@ -100,6 +104,18 @@ export default function Register() {
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
+
+
+    const onChangeEmail = (e) => {
+        handleChange(e)
+        if (!validateEmail(data.email)) {
+            setEmailMessage("*Enter valid email")
+        }
+        else if (validateEmail(data.email)) {
+            setEmailMessage("")
+        }
+    }
+
 
     useEffect(() => {
         document.title = "Register - GEET"
@@ -143,7 +159,7 @@ export default function Register() {
                                     onChange={handleChange}
 
                                 />
-                                <Typography variant='body2' component="body2" color="secondary.dark" sx={{fontSize:"12px"}}>*Username should contain  more then 6 characters</Typography>
+                                <Typography variant='body2' component="body2" color="secondary.dark" sx={{ fontSize: "12px" }}>*Username should contain  more then 6 characters</Typography>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -155,8 +171,9 @@ export default function Register() {
                                     type="text"
                                     autoComplete="email"
                                     value={data.email}
-                                    onChange={handleChange}
+                                    onChange={onChangeEmail}
                                 />
+                                <Typography variant='body2' component="body2" color="secondary.dark" sx={{ fontSize: "12px" }}>{emailMessage}</Typography>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField

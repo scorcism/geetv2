@@ -12,6 +12,8 @@ import Memory from './components/Memory';
 import AddMemory from './pages/AddMemory';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Me from './pages/Me';
+import NotFound from './pages/NotFount';
 
 
 function App() {
@@ -40,6 +42,8 @@ function App() {
             <Route path="/add" element={<AddMemory />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/me" element={<Me />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
         </GlobalContextProvider>

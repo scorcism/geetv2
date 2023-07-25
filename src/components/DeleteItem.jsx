@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, TextField, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from "react-router-dom";
@@ -8,8 +8,9 @@ const DeleteItem = ({ yaad }) => {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState(false);
     const [password, setPassword] = useState("");
+    const [userToken, setUserToken] = useState()
+    
     let navigate = useNavigate();
-
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -20,6 +21,7 @@ const DeleteItem = ({ yaad }) => {
     };
 
     async function deleteNote(url = "") {
+        
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${url}`, {
             method: "DELETE",
             crossDomain: true,
@@ -60,6 +62,11 @@ const DeleteItem = ({ yaad }) => {
             setMessage("")
         }, 3000);
     }
+
+    useEffect(()=>{
+        let user_token = localStorage.getItem("user-token");
+        setUserToken(user_token)
+    },[])
 
     return (
         <>

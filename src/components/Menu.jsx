@@ -3,6 +3,11 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Grid } from '@mui/material';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { useNavigate } from 'react-router-dom';
+
 export default function UserMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -12,6 +17,12 @@ export default function UserMenu() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    let navigate = useNavigate();
+
+    function userLogout(){
+        localStorage.removeItem("user-token");
+        window.location.href = "/login"
+    }
 
     return (
         <div>
@@ -22,7 +33,7 @@ export default function UserMenu() {
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
             >
-                <AccountCircleIcon/>
+                <AccountCircleIcon />
             </Button>
             <Menu
                 id="basic-menu"
@@ -33,9 +44,19 @@ export default function UserMenu() {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <Grid container space={2} direction="column">
+                    <Grid item >
+                        <MenuItem onClick={()=>{
+                            navigate("/me")
+                        }}><SentimentSatisfiedAltIcon color='secondary' sx={{ mr: 1 }} /> Profile</MenuItem>
+                    </Grid>
+                    <Grid>
+
+                        <MenuItem onClick={()=>{
+                            userLogout()
+                        }}><ExitToAppIcon sx={{ mr: 1 }} color='secondary' />Logout</MenuItem>
+                    </Grid>
+                </Grid>
             </Menu>
         </div>
     );

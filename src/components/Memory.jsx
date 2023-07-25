@@ -1,6 +1,6 @@
 import { Badge, Box, Button, Card, CardMedia, Chip, Container, Fab, Grid, IconButton, Snackbar, Tooltip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, BrowserRouter as Router, Route, useParams } from "react-router-dom";
+import { Link, BrowserRouter as Router, Route, useParams, Navigate, useNavigate } from "react-router-dom";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteItem from "./DeleteItem";
 import FaceIcon from '@mui/icons-material/Face';
 import CloseIcon from '@mui/icons-material/Close';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
 const Memory = () => {
 
@@ -25,6 +26,7 @@ const Memory = () => {
     const [snackMessage, setSnackMessage] = useState("")
     const [userToken, setUserToken] = useState()
 
+    let navigate = useNavigate();
 
     async function getMemory(url = "") {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${url}`, {
@@ -39,8 +41,8 @@ const Memory = () => {
 
     const getMem = async () => {
         let res = await getMemory(`/getmemory/${id}`)
-        if(!res){
-            window.location.href="/"
+        if (!res) {
+            window.location.href = "/"
             return;
         }
         let mem = res.memory[0]
@@ -61,6 +63,13 @@ const Memory = () => {
     }
 
     const likeClick = async () => {
+
+        if (!userToken) {
+            setSnackMessage("Please login!!")
+            setOpen(true);
+            return;
+        }
+
         let res = await postLike(`memory/stats/like/${memory._id}`)
         // console.log(res.message)
         if (res.status == 1) {
@@ -168,11 +177,20 @@ const Memory = () => {
                                         <ContentCopyIcon />
                                     </Fab>
                                 </Tooltip>
-                                <Tooltip title="Delete" color="primary" sx={{ cursor: "pointer" }} placement="bottom">
+                                {
+                                    userToken ?
+                                        <Tooltip title="Delete" color="primary" sx={{ cursor: "pointer" }} placement="bottom">
+                                            <DeleteItem yaad={memory} />
+                                        </Tooltip>
+                                        :
+                                        <Tooltip title="Login" color="primary" sx={{ cursor: "pointer" }} placement="bottom">
+                                            <Fab size="small" color="primary" onClick={()=>{navigate("/login")}} aria-label="copy">
+                                                <NoAccountsIcon />
+                                            </Fab>
+                                        </Tooltip>
 
-                                    <DeleteItem yaad={memory} />
+                                }
 
-                                </Tooltip>
                             </Container>
                         </Grid>
 
@@ -185,10 +203,11 @@ const Memory = () => {
                         <Grid item xs={6} sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }} align="center" >
                             <Box
                                 component="img"
-                                sx={{
-                                    m: 1,
-                                    maxHeight: "50vh",
-                                    maxWeight: "50vh"
+                                style={{
+                                    maxWidth: "100%",
+                                    height: "auto",
+                                    padding: "0",
+                                    margin: "10px 0px"
                                 }}
                                 alt={memory.name}
                                 src={memory.image}
