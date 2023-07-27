@@ -57,7 +57,7 @@ const Me = () =>{
         <>
         <Snacks snackbar_={snackbar_} setSnackBar_={setSnackBar_} />
             <p>
-            hello world
+            Profile page branch set up
             </p>
         
         </>
