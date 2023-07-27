@@ -26,6 +26,9 @@ export default function Register() {
     })
 
     const [emailMessage, setEmailMessage] = useState("");
+    const [userNameMessage, setUserNameMessage] = useState("");
+    const [passwordMessage, setPasswordMessage] = useState("");
+
 
     async function postData(url = "") {
         console.log("URL: " + `${process.env.REACT_APP_BACKEND_URL}/${url}`)
@@ -53,7 +56,13 @@ export default function Register() {
     };
 
 
-    const formSubit = async () => {
+    const checkPassword = (str) => {
+        var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        return re.test(str);
+    }
+
+
+    const formSubmit = async () => {
 
 
         if (data.username.length < 6) {
@@ -69,11 +78,6 @@ export default function Register() {
                 open: true,
             })
             return;
-        }
-
-        const checkPassword = (str) => {
-            var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-            return re.test(str);
         }
 
         if (!checkPassword(data.password)) {
@@ -92,12 +96,20 @@ export default function Register() {
             })
         } else if (res.status == 1) {
             setSnackBar_({
-                message: "Registerd successfully, You will be redirected in 4 seconds",
+                message: `*Check your mail box: *${data.email}*`,
                 open: true,
             })
-            setTimeout(() => {
-                navigate("/login")
-            }, 4000);
+            setData({
+                username: "",
+                email: "",
+                password: ""
+            })
+        }
+    }
+
+    const handleOnKeyUp = (e) => {
+        if(e.key =="Enter"){
+            formSubmit();
         }
     }
 
@@ -113,6 +125,24 @@ export default function Register() {
         }
         else if (validateEmail(data.email)) {
             setEmailMessage("")
+        }
+    }
+
+    const onChangeUserame = (e) => {
+        handleChange(e)
+        if (data.username.length <= 6) {
+            setUserNameMessage("*Username should contain more then 6 characters")
+        } else if (data.username.length > 6) {
+            setUserNameMessage("")
+        }
+    }
+
+    const onChangePassword = (e) => {
+        handleChange(e)
+        if (!checkPassword(data.password)) {
+            setPasswordMessage("*Password should contain  min 8 letters , with at least a symbol, upper and lower case letters and a number")
+        } else if (checkPassword(data.password)) {
+            setPasswordMessage("")
         }
     }
 
@@ -156,10 +186,10 @@ export default function Register() {
                                     name="username"
                                     type='text'
                                     value={data.username}
-                                    onChange={handleChange}
+                                    onChange={onChangeUserame}
 
                                 />
-                                <Typography variant='body2' component="body2" color="secondary.dark" sx={{ fontSize: "12px" }}>*Username should contain  more then 6 characters</Typography>
+                                <Typography variant='body2' component="body2" color="secondary.dark" sx={{ fontSize: "12px" }}>{userNameMessage}</Typography>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -185,14 +215,15 @@ export default function Register() {
                                     id="password"
                                     autoComplete="new-password"
                                     value={data.password}
-                                    onChange={handleChange}
+                                    onChange={onChangePassword}
+                                    onKeyUp={handleOnKeyUp}
                                 />
-                                <Typography variant='body' component="body" color="secondary.dark" sx={{ fontSize: "12px" }}>*Password should contain  min 8 letters , with at least a symbol, upper and lower case letters and a number</Typography>
+                                <Typography variant='body' component="body" color="secondary.dark" sx={{ fontSize: "12px" }}>{passwordMessage}</Typography>
                             </Grid>
 
                         </Grid>
                         <Button
-                            onClick={formSubit}
+                            onClick={formSubmit}
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}

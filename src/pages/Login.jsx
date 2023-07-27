@@ -52,19 +52,26 @@ export default function Login() {
             })
         } else if (res.status == 1) {
             setSnackBar_({
-                message: "Logged in successfully, you will be redirected to home page in 4 seconds",
+                message: "Logged in successfully, you will be redirected to home page in 2 seconds",
                 open: true,
             })
             localStorage.setItem("user-token", res.message)
             setTimeout(() => {
-                navigate("/")
-            }, 4000);
+                window.location.href="/"
+            }, 2000);
         }
     };
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })
     }
+
+    const handleOnKeyUp = (e) => {
+        if(e.key =="Enter"){
+            formSubmit();
+        }
+    }
+
 
     useEffect(() => {
         document.title = "Login - GEET"
@@ -117,6 +124,7 @@ export default function Login() {
                             autoComplete="current-password"
                             value={data.password}
                             onChange={handleChange}
+                            onKeyUp={handleOnKeyUp}
                         />
                         <Button
                             fullWidth
